@@ -66,6 +66,15 @@ async function run() {
           res.send(result)
       })
 
+      //  specific Book for some reading of this book
+        app.get('/readBook/:bookName',async(req,res)=>{
+              const bookName = req.params.bookName
+              const query = {bookName : bookName}
+              const result = await booksCollection.findOne(query)
+              res.send(result)
+        })
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

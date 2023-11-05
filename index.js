@@ -82,7 +82,15 @@ async function run() {
           res.send(result)
         })
 
-       
+        // specific email based borrowed books collect 
+        app.get('/borrowd-books',async(req,res)=>{
+          let query = {}
+          if (req.query?.email) {
+             query = { email : req.query.email } 
+          }
+          const result = await borrowedCollection.find(query).toArray()
+          res.send(result)
+        })
 
         // only updated quantity decrease when user borrowed in book
 

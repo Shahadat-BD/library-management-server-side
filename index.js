@@ -30,6 +30,7 @@ async function run() {
 
     const categoryCollection = client.db("BooksLibrary").collection('bookCategory');
     const booksCollection = client.db("BooksLibrary").collection('booksAdded');
+    const borrowedCollection = client.db("BooksLibrary").collection('borrowedBooks');
    
     // book category collection by get api method
           app.get("/book_category",async(req,res)=>{
@@ -66,15 +67,38 @@ async function run() {
           res.send(result)
       })
 
-      //  specific Book for some reading of this book
+      //  specific Book for some core concept reading of this book.
         app.get('/readBook/:bookName',async(req,res)=>{
               const bookName = req.params.bookName
               const query = {bookName : bookName}
               const result = await booksCollection.findOne(query)
-              res.send(result)
+              res.send(result) 
         })
 
+        // borrowed books added in database using post api
+        app.post('/borrowd-books',async(req,res)=>{
+          const borrowedBooks = req.body
+          const result = await borrowedCollection.insertOne(borrowedBooks)
+          res.send(result)
+        })
 
+       
+
+        // only updated quantity decrease when user borrowed in book
+
+          app.patch('/books/:id',async(req,res)=>{
+            const id = req.params.id
+            const filter = {_id : new ObjectId(id)}
+            const updateQuantity =  req.body;
+         
+            const updatedDoc =  {
+              $set : {
+                quantity : updateQuantity.quantity
+              }
+            }
+            const result = await booksCollection.updateOne(filter,updatedDoc)
+            res.send(result)
+          })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

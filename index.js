@@ -92,7 +92,9 @@ async function run() {
           res.send(result)
         })
 
-        // only updated quantity decrease when user borrowed in book
+        // updated quantity decrease and increase. 
+        // if user borrowed the book then decrease quantity of this book.
+        // If user return the book then increase quantity of this book.
 
           app.patch('/books/:id',async(req,res)=>{
             const id = req.params.id
@@ -105,6 +107,14 @@ async function run() {
               }
             }
             const result = await booksCollection.updateOne(filter,updatedDoc)
+            res.send(result)
+          })
+        
+          // deleted return book by delete api
+          app.delete('/borrowd-books/:id',async(req,res)=>{
+            const id = req.params.id
+            const query = { _id : new ObjectId(id) };
+            const result = await borrowedCollection.deleteOne(query);
             res.send(result)
           })
 

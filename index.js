@@ -50,6 +50,26 @@ async function run() {
           res.send(result)
          })
 
+        // books updated by put api method
+
+        app.put("/books-add/:id",async(req,res)=>{
+          const id = req.params.id
+          const book = req.body
+          const filter = {_id : new ObjectId(id)}
+          const options = { upsert: true };
+          const updateDoc = {
+           $set: {
+             bookName :   book.bookName,
+             authorName :    book.authorName,
+             rating :   book.rating,
+             bookImage :   book.bookImage,
+             category :   book.category,
+           },
+         };
+         const updatedBook = await booksCollection.updateOne(filter,updateDoc,options)
+         res.send(updatedBook)
+     })
+
         // specific category wise all books collect using get method
         app.get('/books/:category',async(req,res)=>{
             const category = req.params.category
@@ -64,15 +84,15 @@ async function run() {
           const id = req.params.id
           const query = {_id: new ObjectId(id)}
           const result = await booksCollection.findOne(query)
-          res.send(result)
+          res.send(result) 
       })
 
       //  specific Book for some core concept reading of this book.
-        app.get('/readBook/:bookName',async(req,res)=>{
-              const bookName = req.params.bookName
-              const query = {bookName : bookName}
+        app.get('/readBook/:id',async(req,res)=>{
+              const id = req.params.id
+              const query = {_id: new ObjectId(id)}
               const result = await booksCollection.findOne(query)
-              res.send(result) 
+              res.send(result)  
         })
 
         // borrowed books added in database using post api

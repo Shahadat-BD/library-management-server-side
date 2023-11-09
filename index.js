@@ -11,9 +11,9 @@ const port = process.env.PORT || 3000
 
 app.use(cors({
   origin : [
-    'http://localhost:5173',
-    "https://bookstack-auth-7442e.web.app/",
-    "https://bookstack-auth-7442e.firebaseapp.com/"
+    'http://localhost:5174',
+    "https://bookstack-auth-7442e.web.app",
+    "https://bookstack-auth-7442e.firebaseapp.com"
   ],
   credentials : true
 }))
@@ -216,3 +216,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
